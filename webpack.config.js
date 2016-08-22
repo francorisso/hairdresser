@@ -1,5 +1,9 @@
-var path = require('path');
-var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var Path = require('path');
+var Webpack = require('webpack');
+
+var bundleFilename = 'bundle.js';
+var bundleDirname = Path.resolve(__dirname, "build");
 
 module.exports = {
   entry: [
@@ -8,9 +12,9 @@ module.exports = {
     './src/index'
   ],
   output: {
-    path: path.resolve(__dirname, "build"),
+    path: bundleDirname,
     publicPath: "/build/",
-    filename: "bundle.js"
+    filename: bundleFilename
   },
   module: {
     loaders: [
@@ -20,13 +24,25 @@ module.exports = {
         loaders: ['react-hot', 'babel'],
       },
       {
+        test: /\.scss$/,
+        include: [
+          Path.resolve(__dirname, 'src'),
+        ],
+        loader: ExtractTextPlugin.extract([
+          'css-loader?modules&camelCase&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+          'postcss-loader',
+          'sass-loader',
+        ])
+      },
+      {
         test: /\.json$/,
         loader: 'json'
       }
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new ExtractTextPlugin(`${bundleDirname}/${bundleFilename}`, {allChunks: true}),
+    new Webpack.HotModuleReplacementPlugin()
   ],
   resolve: {
     extensions: ['', '.js', '.jsx']

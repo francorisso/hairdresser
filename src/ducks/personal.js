@@ -1,20 +1,24 @@
 import Immutable from 'immutable'
 
-const NAMESPACE = 'hairdresser-helper/services';
+const NAMESPACE = 'hairdresser-helper/personal';
 
 export const ADD = `${NAMESPACE}/add`;
 export const TOGGLE_ADD_FORM = `${NAMESPACE}/toggle_add_form`;
 
 const initState = Immutable.Map({
   adding : false,
-  services: Immutable.List([
+  personal: Immutable.List([
     {
-      name: 'Peluqueria',
-      time: 40
+      name: 'Rosana',
+      services: []
     },
     {
-      name: 'Color',
-      time: 60
+      name: 'Magali',
+      services: []
+    },
+    {
+      name: 'Luciana',
+      services: []
     },
   ]),
 });

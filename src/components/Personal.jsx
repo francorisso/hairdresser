@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import {add, toggleAddForm} from '../ducks/services';
 import AddService from './Services/AddService';
+import styles from './Personal.scss';
 
 class Personal extends PureComponent {
   addService () {
@@ -40,7 +41,7 @@ class Personal extends PureComponent {
   }
 };
 
-export default connect(({services})=>({
+export default connect(({personal})=>({
   services: services.get('services'),
   adding: services.get('adding'),
 }))(Personal);

@@ -8,7 +8,7 @@ class App extends PureComponent {
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <div className="navbar-header">
-              <Link to="/" className="navbar-brand">Las Frigerio</Link>
+              <Link to="/" className="navbar-brand">Peluqueria</Link>
             </div>
             <ul className="nav navbar-nav">
               <li><Link to="/">Inicio</Link></li>

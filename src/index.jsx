@@ -8,6 +8,7 @@ import store from './store';
 import App from './components/App';
 import Settings from './components/Settings';
 import Services from './components/Services';
+import Personal from './components/Personal';
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -18,6 +19,7 @@ render(
       <Route path="/" component={App}>
         <Route path="settings" component={Settings} />
         <Route path="services" component={Services} />
+        <Route path="personal" component={Personal} />
       </Route>
     </Router>
   </Provider>,
