@@ -1,2 +1,2 @@
-# redux-initial
-Simple personal redux init package
+# hairdresser
+System to make the hairdresser's life easy
