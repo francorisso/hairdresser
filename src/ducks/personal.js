@@ -26,8 +26,7 @@ export default function reducer (state=initState, action) {
   switch (action.type) {
     case ADD: {
       const {name, time} = action;
-      const services = state.get('services').push({name, time});
-      return state.set('services', services);
+      return state.set('personal', state.get('personal').push({name, time}));
     }
     case TOGGLE_ADD_FORM: {
       return state.set('adding', !state.get('adding'));

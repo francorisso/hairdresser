@@ -2,9 +2,6 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var Path = require('path');
 var Webpack = require('webpack');
 
-var bundleFilename = 'bundle.js';
-var bundleDirname = Path.resolve(__dirname, "build");
-
 module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
@@ -12,9 +9,9 @@ module.exports = {
     './src/index'
   ],
   output: {
-    path: bundleDirname,
-    publicPath: "/build/",
-    filename: bundleFilename
+    path: Path.resolve(__dirname, 'build'),
+    publicPath: '/build/',
+    filename: 'bundle.js'
   },
   module: {
     loaders: [
@@ -41,7 +38,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin(`${bundleDirname}/${bundleFilename}`, {allChunks: true}),
+    new ExtractTextPlugin(`build/bundle.css`, {allChunks: true}),
     new Webpack.HotModuleReplacementPlugin()
   ],
   resolve: {

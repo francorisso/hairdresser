@@ -1,11 +1,11 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import {add, toggleAddForm} from '../ducks/services';
-import AddService from './Services/AddService';
+import {add, toggleAddForm} from '../ducks/personal';
+import AddPersonal from './Personal/AddPersonal';
 import styles from './Personal.scss';
 
 class Personal extends PureComponent {
-  addService () {
+  addPersonal () {
     const { dispatch } = this.props;
     return (fields) => {
       dispatch(add(fields));
@@ -21,12 +21,12 @@ class Personal extends PureComponent {
   }
   
   render() {
-    const {services, adding} = this.props;
+    const {personal, adding} = this.props;
     return <div>
-      <h1>Personal</h1>
+      <h1 className={styles.title}>Personal</h1>
       <ul>
-      {services.map((service,idx) => (
-        <li key={idx}>{service.name} - {service.time} minutos</li>
+      {personal.map((person,idx) => (
+        <li key={idx}>{person.name} - {person.time} minutos</li>
       ))}
       </ul>
       { !adding &&
@@ -36,12 +36,12 @@ class Personal extends PureComponent {
           </button>
         </div>
       }
-      { adding && <AddService onSubmit={this.addService()} />}
+      { adding && <AddPersonal onSubmit={this.addPersonal()} />}
     </div>
   }
 };
 
 export default connect(({personal})=>({
-  services: services.get('services'),
-  adding: services.get('adding'),
+  personal: personal.get('personal'),
+  adding: personal.get('adding'),
 }))(Personal);
