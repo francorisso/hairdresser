@@ -1,5 +1,3 @@
-var messages = {};
-
 /*
  * Message Event
  *
@@ -14,7 +12,7 @@ var messages = {};
  * then we'll simply confirm that we've received the attachment.
  *
  */
-messages.receivedMessage = function(event) {
+var receivedMessage = function(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
@@ -65,12 +63,13 @@ messages.receivedMessage = function(event) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
+module.exports.receivedMessage = receivedMessage;
 
 /*
  * Send a text message using the Send API.
  *
  */
-messages.sendTextMessage = function(recipientId, messageText) {
+var sendTextMessage = function(recipientId, messageText) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -83,12 +82,13 @@ messages.sendTextMessage = function(recipientId, messageText) {
 
   callSendAPI(messageData);
 }
+module.exports.sendTextMessage = sendTextMessage;
 
 /*
  * Send a read receipt to indicate the message has been read
  *
  */
-messages.sendReadReceipt = function(recipientId) {
+var sendReadReceipt = function(recipientId) {
   console.log("Sending a read receipt to mark message as seen");
 
   var messageData = {
@@ -100,12 +100,13 @@ messages.sendReadReceipt = function(recipientId) {
 
   callSendAPI(messageData);
 }
+module.exports.sendReadReceipt = sendReadReceipt;
 
 /*
  * Turn typing indicator on
  *
  */
-messages.sendTypingOn = function(recipientId) {
+var sendTypingOn = function(recipientId) {
   console.log("Turning typing indicator on");
 
   var messageData = {
@@ -117,12 +118,13 @@ messages.sendTypingOn = function(recipientId) {
 
   callSendAPI(messageData);
 }
+module.exports.sendTypingOn = sendTypingOn;
 
 /*
  * Turn typing indicator off
  *
  */
-messages.sendTypingOff = function(recipientId) {
+var sendTypingOff = function(recipientId) {
   console.log("Turning typing indicator off");
 
   var messageData = {
@@ -134,7 +136,7 @@ messages.sendTypingOff = function(recipientId) {
 
   callSendAPI(messageData);
 }
-
+module.exports.sendTypingOff = sendTypingOff;
 
 /*
  * Delivery Confirmation Event
@@ -143,7 +145,7 @@ messages.sendTypingOff = function(recipientId) {
  * these fields at https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-delivered
  *
  */
-messages.receivedDeliveryConfirmation = function(event) {
+var receivedDeliveryConfirmation = function(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var delivery = event.delivery;
@@ -160,6 +162,7 @@ messages.receivedDeliveryConfirmation = function(event) {
 
   console.log("All message before %d were delivered.", watermark);
 }
+module.exports.receivedDeliveryConfirmation = receivedDeliveryConfirmation;
 
 /*
  * Message Read Event
@@ -168,7 +171,7 @@ messages.receivedDeliveryConfirmation = function(event) {
  * https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-read
  *
  */
-messages.receivedMessageRead = function(event) {
+var receivedMessageRead = function(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
 
@@ -179,6 +182,7 @@ messages.receivedMessageRead = function(event) {
   console.log("Received message read event for watermark %d and sequence " +
     "number %d", watermark, sequenceNumber);
 }
+module.exports.receivedMessageRead = receivedMessageRead;
 
 /*
  * Authorization Event
@@ -188,7 +192,7 @@ messages.receivedMessageRead = function(event) {
  * https://developers.facebook.com/docs/messenger-platform/webhook-reference/authentication
  *
  */
-messages.receivedAuthentication = function(event) {
+var receivedAuthentication = function(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfAuth = event.timestamp;
@@ -208,13 +212,14 @@ messages.receivedAuthentication = function(event) {
   // to let them know it was successful.
   sendTextMessage(senderID, "Authentication successful");
 }
+module.exports.receivedAuthentication = receivedAuthentication;
 
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll
  * get the message id in a response
  *
  */
-messages.callSendAPI = function(messageData) {
+var callSendAPI = function(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -238,5 +243,4 @@ messages.callSendAPI = function(messageData) {
     }
   });
 }
-
-module.exports = messages;
+module.exports.callSendAPI = callSendAPI;
