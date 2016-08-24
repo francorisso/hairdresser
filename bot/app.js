@@ -93,7 +93,9 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       pageEntry.messaging.forEach(function(messagingEvent) {
-        if (messagingEvent.message) {
+        if (messagingEvent.optin) {
+          messages.receivedAuthentication(messagingEvent);
+        } else if (messagingEvent.message) {
           messages.receivedMessage(messagingEvent);
         } else if (messagingEvent.delivery) {
           messages.receivedDeliveryConfirmation(messagingEvent);
