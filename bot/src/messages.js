@@ -188,7 +188,7 @@ messages.receivedMessageRead = function(event) {
  * https://developers.facebook.com/docs/messenger-platform/webhook-reference/authentication
  *
  */
-messages.receivedAuthentication(event) {
+messages.receivedAuthentication = function(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfAuth = event.timestamp;
