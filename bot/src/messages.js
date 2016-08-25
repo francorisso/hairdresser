@@ -145,7 +145,6 @@ var sendTypingOn = function(recipientId) {
     },
     sender_action: "typing_on"
   };
-
   callSendAPI(messageData);
 }
 module.exports.sendTypingOn = sendTypingOn;
@@ -268,8 +267,9 @@ var callSendAPI = function(messageData) {
       console.log("Successfully called Send API for recipient %s",
         recipientId);
       }
-    } else {
-      console.error(response.error);
+    }
+    else {
+      console.error(error, response);
     }
   });
 }
