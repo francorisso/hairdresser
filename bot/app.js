@@ -116,8 +116,8 @@ app.post('/bot/webhook', function (req, res) {
         })
         .then(function(messages){
           Messages.sendTypingOff(sender.id);
-          console.log(messages);
           for (let message of messages) {
+            console.log(message);
             Messages.sendTextMessage(sender.id, message);
           }
         });
