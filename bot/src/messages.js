@@ -78,8 +78,8 @@ var receivedMessage = function(event) {
   }
 
   if (messageText) {
+    sendTypingOn();
     return new Promise(function(resolve,reject){
-      sendTypingOn();
       setTimeout(function(){
         const answer = Response.getResponse(messageText);
         resolve(answer);

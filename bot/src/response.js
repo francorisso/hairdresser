@@ -10,12 +10,10 @@ Talk.prototype = {
     const greetings = [
       'hola',
       'buenas',
-      'como va?',
-      'que tal?',
       'hello',
       'hi',
     ];
-    return this.message.split(/\s+/).reduce(function(acc, text){
+    return this.message.replace(/(\W)/gi,'').split(/\s+/).reduce(function(acc, text){
       return acc || greetings.indexOf(text.toLowerCase())!==-1;
     }, false);
   },
