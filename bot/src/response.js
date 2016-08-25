@@ -13,8 +13,8 @@ Talk.prototype = {
       'hello',
       'hi',
     ];
-    return this.message.replace(/(\W)/gi,'').split(/\s+/).reduce(function(acc, text){
-      return acc || greetings.indexOf(text.toLowerCase())!==-1;
+    return this.message.split(/\s+/).reduce(function(acc, text){
+      return acc || greetings.indexOf(text.replace(/(\W)/gi,'').toLowerCase())!==-1;
     }, false);
   },
   toString: function() {

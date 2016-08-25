@@ -53,44 +53,9 @@ var receivedMessage = function(event) {
   console.log("Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
-
-  var isEcho = message.is_echo;
-  var messageId = message.mid;
-  var appId = message.app_id;
-  var metadata = message.metadata;
-
-  // You may get a text or attachment but not both
   var messageText = message.text;
-  var messageAttachments = message.attachments;
-  var quickReply = message.quick_reply;
-
-  if (isEcho) {
-    console.log("Received echo for message %s and app %d with metadata %s",
-      messageId, appId, metadata);
-    return;
-  } else if (quickReply) {
-    var quickReplyPayload = quickReply.payload;
-    console.log("Quick reply for message %s with payload %s",
-      messageId, quickReplyPayload);
-
-    sendTextMessage(senderID, "Quick reply tapped");
-    return;
-  }
-
   if (messageText) {
-    sendTypingOn();
-    return new Promise(function(resolve,reject){
-      setTimeout(function(){
-        const answer = Response.getResponse(messageText);
-        resolve(answer);
-      }, 2000);
-    }).then(function(answer){
-      sendTypingOff();
-      sendTextMessage(senderID, answer);
-    });
-  }
-  else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
+    return Response.getResponse(messageText);
   }
 }
 module.exports.receivedMessage = receivedMessage;
@@ -259,7 +224,6 @@ var callSendAPI = function(messageData) {
     if (!error && response.statusCode == 200) {
       var recipientId = body.recipient_id;
       var messageId = body.message_id;
-
       if (messageId) {
         console.log("Successfully sent message with id %s to recipient %s",
           messageId, recipientId);

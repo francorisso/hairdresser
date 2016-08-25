@@ -82,20 +82,16 @@ app.get('/bot/webhook', function(req, res) {
  */
 app.post('/bot/webhook', function (req, res) {
   var data = req.body;
-  // Make sure this is a page subscription
   if (data.object == 'page') {
-    // Iterate over each entry
-    // There may be multiple if batched
+    const textMessages = [];
     data.entry.forEach(function(pageEntry) {
       var pageID = pageEntry.id;
       var timeOfEvent = pageEntry.time;
-
-      // Iterate over each messaging event
       pageEntry.messaging.forEach(function(messagingEvent) {
         if (messagingEvent.optin) {
           messages.receivedAuthentication(messagingEvent);
         } else if (messagingEvent.message) {
-          messages.receivedMessage(messagingEvent);
+          textMessages.push(messagingEvent);
         } else if (messagingEvent.delivery) {
           messages.receivedDeliveryConfirmation(messagingEvent);
         } else if (messagingEvent.read) {
@@ -106,11 +102,29 @@ app.post('/bot/webhook', function (req, res) {
       });
     });
 
-    // Assume all went well.
-    //
-    // You must send back a 200, within 20 seconds, to let us know you've
-    // successfully received the callback. Otherwise, the request will time out.
-    res.sendStatus(200);
+    if (textMessages.length==0) {
+      res.sendStatus(200);
+    }
+    else {
+      for (let messagingEvent in textMessages) {
+        messages.sendTypingOn();
+        res.sendStatus(200);
+        const response = new Promise(function(resolve,rej){
+          setTimeout(function(){
+            resolve(messages.receivedMessage(messagingEvent));
+          }, 1000);
+        })
+        .then(function(message){
+          messages.sendTypingOff();
+          res.sendStatus(200);
+          return message;
+        })
+        .then(function(message){
+          messages.sendTextMessage(messagingEvent.sender.id, message);
+          res.sendStatus(200);
+        });
+      }
+    }
   }
 });
 
