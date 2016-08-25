@@ -11,7 +11,7 @@ Talk.prototype = {
   },
   get dirty() {
     const msgs = ['Apa... bueno, no se que hacer', '😘', '🙈 🙉 🙊', 'Me confunde señor!'];
-    return msgs[Math.floor(Math.random()*(msgs.length-1))];
+    return msgs[parseInt(Math.random()*(msgs.length-1),10)];
   },
   searchInMessage: function(words) {
     return this.message.split(/\s+/).reduce(function(acc, text){
