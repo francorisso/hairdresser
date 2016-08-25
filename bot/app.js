@@ -17,7 +17,7 @@ const
   express = require('express'),
   https = require('https'),
   request = require('request'),
-  Messages = require('./src/Messages');
+  Messages = require('./src/messages');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
