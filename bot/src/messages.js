@@ -233,7 +233,7 @@ var callSendAPI = function(messageData) {
       }
     }
     else {
-      console.error(error, response);
+      console.error(error);
     }
   });
 }
