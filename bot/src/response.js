@@ -1,8 +1,8 @@
-function Message (message) {
+function Talk (message) {
   this.message = message;
 }
 
-Message.prototype = {
+Talk.prototype = {
   get greetings() {
     return 'Hola! En que puedo ayudarte?';
   },
@@ -25,9 +25,9 @@ Message.prototype = {
 };
 
 const getResponse = function(message) {
-  const message = new Message(message);
-  if (message.hasGreetings()) {
-    return message.greetings;
+  const talk = new Talk(message);
+  if (talk.hasGreetings()) {
+    return talk.greetings;
   }
   return 'Perdón, no entiendo a que te refieres :(';
 }
