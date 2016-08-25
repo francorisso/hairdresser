@@ -1,4 +1,8 @@
-const request = require('request'), config = require('config');
+const
+  request = require('request'),
+  config = require('config'),
+  response = require('./response');
+
 
 // App Secret can be retrieved from the App Dashboard
 const APP_SECRET = (process.env.MESSENGER_APP_SECRET) ?
@@ -61,7 +65,6 @@ var receivedMessage = function(event) {
   var quickReply = message.quick_reply;
 
   if (isEcho) {
-    // Just logging message echoes to console
     console.log("Received echo for message %s and app %d with metadata %s",
       messageId, appId, metadata);
     return;
@@ -75,19 +78,18 @@ var receivedMessage = function(event) {
   }
 
   if (messageText) {
-
-    // If we receive a text message, check to see if it matches any special
-    // keywords and send back the corresponding example. Otherwise, just echo
-    // the text we received.
-    switch (messageText) {
-      case 'mariana':
-        sendTextMessage(senderID, 'Hola Mariana, como estas?');
-        break;
-
-      default:
-        sendTextMessage(senderID, messageText);
-    }
-  } else if (messageAttachments) {
+    return new Promise(function(resolve,reject){
+      sendTypingOn();
+      setTimeout(function(){
+        const response = response.getResponse(messageText);
+        resolve(response);
+      }, 2000);
+    }).then(function(response){
+      sendTypingOff();
+      sendTextMessage(senderID, response);
+    });
+  }
+  else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
