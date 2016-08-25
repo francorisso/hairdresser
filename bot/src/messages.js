@@ -1,7 +1,7 @@
 const
   request = require('request'),
   config = require('config'),
-  response = require('./response');
+  Response = require('./response');
 
 
 // App Secret can be retrieved from the App Dashboard
@@ -81,12 +81,12 @@ var receivedMessage = function(event) {
     return new Promise(function(resolve,reject){
       sendTypingOn();
       setTimeout(function(){
-        const response = response.getResponse(messageText);
-        resolve(response);
+        const answer = Response.getResponse(messageText);
+        resolve(answer);
       }, 2000);
-    }).then(function(response){
+    }).then(function(answer){
       sendTypingOff();
-      sendTextMessage(senderID, response);
+      sendTextMessage(senderID, answer);
     });
   }
   else if (messageAttachments) {
