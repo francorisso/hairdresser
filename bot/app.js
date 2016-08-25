@@ -17,7 +17,7 @@ const
   express = require('express'),
   https = require('https'),
   request = require('request'),
-  messages = require('./src/messages');
+  Messages = require('./src/Messages');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -89,13 +89,13 @@ app.post('/bot/webhook', function (req, res) {
       var timeOfEvent = pageEntry.time;
       pageEntry.messaging.forEach(function(messagingEvent) {
         if (messagingEvent.optin) {
-          messages.receivedAuthentication(messagingEvent);
+          Messages.receivedAuthentication(messagingEvent);
         } else if (messagingEvent.message) {
           textMessages.push(messagingEvent);
         } else if (messagingEvent.delivery) {
-          messages.receivedDeliveryConfirmation(messagingEvent);
+          Messages.receivedDeliveryConfirmation(messagingEvent);
         } else if (messagingEvent.read) {
-          messages.receivedMessageRead(messagingEvent);
+          Messages.receivedMessageRead(messagingEvent);
         } else {
           console.log("Webhook received unknown messagingEvent: ", messagingEvent);
         }
@@ -108,24 +108,20 @@ app.post('/bot/webhook', function (req, res) {
     else {
       for (let messagingEvent of textMessages) {
         let sender = messagingEvent.sender;
-        messages.sendTypingOn(sender.id);
-        res.sendStatus(200);
+        Messages.sendTypingOn(sender.id);
         const response = new Promise(function(resolve,rej){
           setTimeout(function(){
-            resolve(messages.receivedMessage(messagingEvent));
+            resolve(Messages.receivedMessage(messagingEvent));
           }, 1000);
         })
         .then(function(message){
-          messages.sendTypingOff();
-          res.sendStatus(200);
+          Messages.sendTypingOff(sender.id);
+          Messages.sendTextMessage(sender.id, message);
           return message;
-        })
-        .then(function(message){
-          messages.sendTextMessage(sender.id, message);
-          res.sendStatus(200);
         });
       }
     }
+    res.sendStatus(200);
   }
 });
 
