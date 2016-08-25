@@ -3,7 +3,7 @@ function Message (message) {
 }
 
 Message.prototype = {
-  get greetings: function() {
+  get greetings() {
     return 'Hola! En que puedo ayudarte?';
   },
   hasGreetings: function() {
