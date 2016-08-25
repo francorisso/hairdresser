@@ -106,7 +106,9 @@ app.post('/bot/webhook', function (req, res) {
       res.sendStatus(200);
     }
     else {
-      for (let messagingEvent of textMessages) {
+      messages.sendTypingOn();
+      res.sendStatus(200);
+      /*for (let messagingEvent of textMessages) {
         messages.sendTypingOn();
         res.sendStatus(200);
         /*const response = new Promise(function(resolve,rej){
@@ -122,8 +124,8 @@ app.post('/bot/webhook', function (req, res) {
         .then(function(message){
           messages.sendTextMessage(messagingEvent.sender.id, message);
           res.sendStatus(200);
-        });*/
-      }
+        });
+      }*/
     }
   }
 });
