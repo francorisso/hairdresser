@@ -114,10 +114,11 @@ app.post('/bot/webhook', function (req, res) {
             resolve(Messages.receivedMessage(messagingEvent));
           }, 1000);
         })
-        .then(function(message){
-          Messages.sendTypingOff(sender.id);
-          Messages.sendTextMessage(sender.id, message);
-          return message;
+        .then(function(messages){
+          for (message of messages) {
+            Messages.sendTypingOff(sender.id);
+            Messages.sendTextMessage(sender.id, message);
+          }
         });
       }
     }
