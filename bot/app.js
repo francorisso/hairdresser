@@ -106,12 +106,11 @@ app.post('/bot/webhook', function (req, res) {
       res.sendStatus(200);
     }
     else {
-      messages.sendTypingOn();
-      res.sendStatus(200);
-      /*for (let messagingEvent of textMessages) {
-        messages.sendTypingOn();
+      for (let messagingEvent of textMessages) {
+        let sender = messagingEvent.sender;
+        messages.sendTypingOn(sender.id);
         res.sendStatus(200);
-        /*const response = new Promise(function(resolve,rej){
+        const response = new Promise(function(resolve,rej){
           setTimeout(function(){
             resolve(messages.receivedMessage(messagingEvent));
           }, 1000);
@@ -122,10 +121,10 @@ app.post('/bot/webhook', function (req, res) {
           return message;
         })
         .then(function(message){
-          messages.sendTextMessage(messagingEvent.sender.id, message);
+          messages.sendTextMessage(sender.id, message);
           res.sendStatus(200);
         });
-      }*/
+      }
     }
   }
 });
