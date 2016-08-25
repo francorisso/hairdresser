@@ -109,7 +109,7 @@ app.post('/bot/webhook', function (req, res) {
       for (let messagingEvent of textMessages) {
         messages.sendTypingOn();
         res.sendStatus(200);
-        const response = new Promise(function(resolve,rej){
+        /*const response = new Promise(function(resolve,rej){
           setTimeout(function(){
             resolve(messages.receivedMessage(messagingEvent));
           }, 1000);
@@ -122,7 +122,7 @@ app.post('/bot/webhook', function (req, res) {
         .then(function(message){
           messages.sendTextMessage(messagingEvent.sender.id, message);
           res.sendStatus(200);
-        });
+        });*/
       }
     }
   }
