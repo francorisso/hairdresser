@@ -16,7 +16,7 @@ Talk.prototype = {
       'hi',
     ];
     return this.message.split(/\s+/).reduce(function(acc, text){
-      return acc || greetings.indexOf(text.toLowerCase());
+      return acc || greetings.indexOf(text.toLowerCase())!==-1;
     }, false);
   },
   toString: function() {
