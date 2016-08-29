@@ -9,10 +9,12 @@ const initState = Immutable.Map({
   adding : false,
   services: Immutable.List([
     {
+      id: 1,
       name: 'Peluqueria',
       time: 40
     },
     {
+      id: 2,
       name: 'Color',
       time: 60
     },

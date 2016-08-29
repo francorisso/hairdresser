@@ -5,14 +5,6 @@ import AddPersonal from './Personal/AddPersonal';
 import styles from './Personal.scss';
 
 class Personal extends PureComponent {
-  addPersonal () {
-    const { dispatch } = this.props;
-    return (fields) => {
-      dispatch(add(fields));
-      dispatch(toggleAddForm());
-    };
-  }
-  
   showAddForm () {
     const { dispatch } = this.props;
     return e => {
@@ -36,12 +28,12 @@ class Personal extends PureComponent {
           </button>
         </div>
       }
-      { adding && <AddPersonal onSubmit={this.addPersonal()} />}
+      { adding && <AddPersonal />}
     </div>
   }
 };
 
-export default connect(({personal})=>({
+export default connect(({personal, services})=>({
   personal: personal.get('personal'),
   adding: personal.get('adding'),
 }))(Personal);

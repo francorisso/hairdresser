@@ -1,11 +1,19 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { routerReducer } from 'react-router-redux'
+import { reducer as formReducer } from 'redux-form';
+import thunk from 'redux-thunk';
 import reducers from './reducers';
 
-console.log(reducers);
-
 const devToolsExtension = window.devToolsExtension && window.devToolsExtension();
-export default createStore(combineReducers({
-  ...reducers,
-  routing: routerReducer,
-}), {}, devToolsExtension);
+
+const store = createStore(
+  combineReducers({
+    ...reducers,
+    form: formReducer,
+    routing: routerReducer,
+  }),
+  {},
+  compose(applyMiddleware(thunk), devToolsExtension)
+);
+
+export default store;
