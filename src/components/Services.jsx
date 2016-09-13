@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import {add, toggleAddForm} from '../ducks/services';
+import {add, get, toggleAddForm} from '../ducks/services';
 import AddService from './Services/AddService';
 
 class Services extends PureComponent {
@@ -19,8 +19,22 @@ class Services extends PureComponent {
     };
   }
   
+  componentDidMount () {
+    const { dispatch } = this.props;
+    dispatch(get());
+  }
+  
+  componentWillUnmount () {
+    const {dispatch, adding} = this.props;
+    if (adding) {
+      dispatch(toggleAddForm());
+    }
+  }
+  
   render() {
-    const {services, adding} = this.props;
+    const {servicesIds, serviceEntities, adding} = this.props;
+    console.log(servicesIds, serviceEntities);
+    const services = servicesIds.map(serviceId => (serviceEntities[serviceId]));
     return <div>
       <h1>Servicios</h1>
       <ul>
@@ -40,7 +54,8 @@ class Services extends PureComponent {
   }
 };
 
-export default connect(({services})=>({
-  services: services.get('services'),
+export default connect(({entities, services})=>({
+  serviceEntities: entities.get('service'),
+  servicesIds: services.get('services'),
   adding: services.get('adding'),
 }))(Services);

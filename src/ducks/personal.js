@@ -1,36 +1,32 @@
 import Immutable from 'immutable';
+import { normalize, arrayOf } from 'normalizr';
+import { getJSON, postJSON } from '../lib/fetch';
+import { personalSchema } from '../schemas';
+import { merge } from './entities';
 
 const NAMESPACE = 'hairdresser-helper/personal';
 
 export const ADD = `${NAMESPACE}/add`;
-export const ADD_POST = `${ADD}/post`;
 export const ADD_SUCCESS = `${ADD}/success`;
-export const ADD_ERROR = `${ADD}/post`;
-
+export const ADD_FAILURE = `${ADD}/failure`;
+export const GET = `${NAMESPACE}/get`;
+export const GET_SUCCESS = `${GET}/success`;
+export const GET_FAILURE = `${GET}/failure`;
 export const TOGGLE_ADD_FORM = `${NAMESPACE}/toggle_add_form`;
 
 const initState = Immutable.Map({
   adding : false,
-  personal: Immutable.List([
-    {
-      name: 'Rosana',
-      services: []
-    },
-    {
-      name: 'Magali',
-      services: []
-    },
-    {
-      name: 'Luciana',
-      services: []
-    },
-  ]),
+  personal: Immutable.List(),
 });
 export default function reducer (state=initState, action) {
   switch (action.type) {
     case ADD_SUCCESS: {
-      const {name, time} = action;
-      return state.set('personal', state.get('personal').push({name, time}));
+      const {person} = action;
+      return state.set('personal', state.get('personal').push(person));
+    }
+    case GET_SUCCESS: {
+      const {personal} = action;
+      return state.set('personal', Immutable.List(personal));
     }
     case TOGGLE_ADD_FORM: {
       return state.set('adding', !state.get('adding'));
@@ -46,28 +42,41 @@ export function toggleAddForm () {
   };
 }
 
-export function add ({name}) {
+export function add ({name, services}) {
   return dispatch => {
-    return new Promise((resolve, reject) => {
-        setTimeout(function(){
-          resolve({
-            name,
-            services: []
-          });
-        }, 4000);
-      })
-      .then(({name, services}) => {
+    dispatch({
+      type: ADD,
+      params: {name, services}
+    });
+    return postJSON('/api/personal', {name, services})
+      .then(person => {
         dispatch({
           type: ADD_SUCCESS,
-          name,
-          services,
+          person,
         });
       })
       .catch(error => {
         dispatch({
-          type: ADD_ERROR,
+          type: ADD_FAILURE,
           error,
         });
+      });
+  };
+}
+
+export function get() {
+  return dispatch => {
+    return getJSON('/api/personal')
+      .then(res => {
+        const {result: personal, entities} = normalize(res, personalSchema);
+        dispatch(merge(entities));
+        dispatch({
+          type: GET_SUCCESS,
+          personal
+        });
+      })
+      .catch(error => {
+        dispatch({type: GET_FAILURE, error});
       });
   };
 }

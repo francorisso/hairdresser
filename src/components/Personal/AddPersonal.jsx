@@ -4,7 +4,18 @@ import { Field, reduxForm } from 'redux-form';
 import {add, toggleAddForm} from '../../ducks/personal';
 
 function onSubmit (fields, dispatch) {
-  return dispatch(add(fields))
+  const formFields = {
+    name: fields.name,
+  };
+  let services = [];
+  let searchingFor = 'services_';
+  for (let field in fields) {
+    if (field.indexOf(searchingFor)===0) {
+      services.push(field.substring(searchingFor.length));
+    }
+  }
+  formFields.services = services;
+  return dispatch(add(formFields))
     .then(result => {dispatch(toggleAddForm())});
 }
 
@@ -31,7 +42,7 @@ let AddPersonal = (props) => {
       <div className="form-group">
         <label>Servicios</label>
         {services.map((service, idx) => (
-          <Field name={ `services_${service.id}` }
+          <Field name={ `services_${service._id}` }
             type="checkbox"
             component={Checkbox}
             label={service.name}
