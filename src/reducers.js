@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import entities from './ducks/entities';
 import personal from './ducks/personal';
 import services from './ducks/services';

@@ -1,46 +1,46 @@
-import React, {PureComponent} from 'react';
-import {connect} from 'react-redux';
-import {add, get, toggleAddForm} from '../ducks/services';
+import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { add, get, toggleAddForm } from '../ducks/services';
 import AddService from './Services/AddService';
 
 class Services extends PureComponent {
-  addService () {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(get());
+  }
+
+  componentWillUnmount() {
+    const { dispatch, adding } = this.props;
+    if (adding) {
+      dispatch(toggleAddForm());
+    }
+  }
+
+  addService() {
     const { dispatch } = this.props;
     return (fields) => {
       dispatch(add(fields));
       dispatch(toggleAddForm());
     };
   }
-  
-  showAddForm () {
+
+  showAddForm() {
     const { dispatch } = this.props;
-    return e => {
+    return () => {
       dispatch(toggleAddForm());
     };
   }
-  
-  componentDidMount () {
-    const { dispatch } = this.props;
-    dispatch(get());
-  }
-  
-  componentWillUnmount () {
-    const {dispatch, adding} = this.props;
-    if (adding) {
-      dispatch(toggleAddForm());
-    }
-  }
-  
+
   render() {
-    const {servicesIds, serviceEntities, adding} = this.props;
+    const { servicesIds, serviceEntities, adding } = this.props;
     console.log(servicesIds, serviceEntities);
     const services = servicesIds.map(serviceId => (serviceEntities[serviceId]));
-    return <div>
+    return (<div>
       <h1>Servicios</h1>
       <ul>
-      {services.map((service,idx) => (
+      { services.map((service, idx) => (
         <li key={idx}>{service.name} - {service.time} minutos</li>
-      ))}
+      )) }
       </ul>
       { !adding &&
         <div className="form-group">
@@ -50,11 +50,11 @@ class Services extends PureComponent {
         </div>
       }
       { adding && <AddService onSubmit={this.addService()} />}
-    </div>
+    </div>);
   }
-};
+}
 
-export default connect(({entities, services})=>({
+export default connect(({ entities, services }) => ({
   serviceEntities: entities.get('service'),
   servicesIds: services.get('services'),
   adding: services.get('adding'),

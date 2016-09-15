@@ -1,29 +1,23 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {save} from '../ducks/settings';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { save } from '../ducks/settings';
 
 class Settings extends Component {
-  fields= {};
-   
-  onSubmit () {
-    const {dispatch} = this.props;
-    return e => {
+  onSubmit() {
+    const { dispatch } = this.props;
+    return (e) => {
       e.preventDefault();
       const fields = [];
-      for (let field in this.fields) {
+      for (const field in this.fields) {
         fields[field] = this.fields[field].value;
       }
       dispatch(save(fields));
     };
   }
-  
-  nameField (field, ref) {
-    return this.fields[field] = ref;
-  }
-  
+
   render() {
-    const {name, address} = this.props;
-    return <div>
+    const { name, address } = this.props;
+    return (<div>
       <h1>Configuracion</h1>
       <form onSubmit={this.onSubmit()}>
         <div className="form-group">
@@ -46,11 +40,11 @@ class Settings extends Component {
           <button className="btn btn-primary">Guardar</button>
         </div>
       </form>
-    </div>
+    </div>);
   }
-};
+}
 
-export default connect(({settings})=>({
+export default connect(({ settings }) => ({
   name: settings.get('name'),
   address: settings.get('address'),
 }))(Settings);

@@ -1,25 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import {add, toggleAddForm} from '../../ducks/personal';
+import { add, toggleAddForm } from '../../ducks/personal';
 
-function onSubmit (fields, dispatch) {
+function onSubmit(fields, dispatch) {
   const formFields = {
     name: fields.name,
   };
-  let services = [];
-  let searchingFor = 'services_';
-  for (let field in fields) {
-    if (field.indexOf(searchingFor)===0) {
+  const services = [];
+  const searchingFor = 'services_';
+  for (const field in fields) {
+    if (field.indexOf(searchingFor) === 0) {
       services.push(field.substring(searchingFor.length));
     }
   }
   formFields.services = services;
   return dispatch(add(formFields))
-    .then(result => {dispatch(toggleAddForm())});
+    .then(() => { dispatch(toggleAddForm()); });
 }
 
-const Checkbox = ({input, meta, label}) => (
+const Checkbox = ({ input, label }) => (
   <div className="checkbox">
     <label>
       <input type="checkbox" {...input} /> {label}
@@ -27,7 +27,7 @@ const Checkbox = ({input, meta, label}) => (
   </div>
 );
 
-const TextField = ({input, meta}) => (
+const TextField = ({ input }) => (
   <div className="form-group">
     <label>{input.placeholder}</label>
     <input className="form-control" {...input} />
@@ -35,18 +35,20 @@ const TextField = ({input, meta}) => (
 );
 
 let AddPersonal = (props) => {
-  const {services, handleSubmit, pristine, submitting} = props;
+  const { services, handleSubmit, pristine, submitting } = props;
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Field name="name" component={TextField} placeholder="Name" />
       <div className="form-group">
         <label>Servicios</label>
         {services.map((service, idx) => (
-          <Field name={ `services_${service._id}` }
+          <Field
+            name={`services_${service._id}`}
             type="checkbox"
             component={Checkbox}
             label={service.name}
-            key={idx} />
+            key={idx}
+          />
         ))}
       </div>
       <div className="form-group">
@@ -54,14 +56,14 @@ let AddPersonal = (props) => {
       </div>
     </form>
   );
-}
+};
 
 AddPersonal = reduxForm({
-  form: 'addPersonalForm'
+  form: 'addPersonalForm',
 })(AddPersonal);
 
 AddPersonal = connect(
-  ({services}) => ({
+  ({ services }) => ({
     services: services.get('services'),
   })
 )(AddPersonal);

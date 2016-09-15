@@ -1,5 +1,6 @@
+/* global window */
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import { routerReducer } from 'react-router-redux'
+import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
 import reducers from './reducers';

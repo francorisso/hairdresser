@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 import { getJSON, postJSON } from '../lib/fetch';
 import { personalSchema } from '../schemas';
 import { merge } from './entities';
@@ -15,17 +15,17 @@ export const GET_FAILURE = `${GET}/failure`;
 export const TOGGLE_ADD_FORM = `${NAMESPACE}/toggle_add_form`;
 
 const initState = Immutable.Map({
-  adding : false,
+  adding: false,
   personal: Immutable.List(),
 });
-export default function reducer (state=initState, action) {
+export default function reducer(state = initState, action) {
   switch (action.type) {
     case ADD_SUCCESS: {
-      const {person} = action;
+      const { person } = action;
       return state.set('personal', state.get('personal').push(person));
     }
     case GET_SUCCESS: {
-      const {personal} = action;
+      const { personal } = action;
       return state.set('personal', Immutable.List(personal));
     }
     case TOGGLE_ADD_FORM: {
@@ -36,26 +36,26 @@ export default function reducer (state=initState, action) {
   }
 }
 
-export function toggleAddForm () {
+export function toggleAddForm() {
   return {
     type: TOGGLE_ADD_FORM,
   };
 }
 
-export function add ({name, services}) {
-  return dispatch => {
+export function add({ name, services }) {
+  return (dispatch) => {
     dispatch({
       type: ADD,
-      params: {name, services}
+      params: { name, services },
     });
-    return postJSON('/api/personal', {name, services})
-      .then(person => {
+    return postJSON('/api/personal', { name, services })
+      .then((person) => {
         dispatch({
           type: ADD_SUCCESS,
           person,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch({
           type: ADD_FAILURE,
           error,
@@ -65,18 +65,16 @@ export function add ({name, services}) {
 }
 
 export function get() {
-  return dispatch => {
-    return getJSON('/api/personal')
-      .then(res => {
-        const {result: personal, entities} = normalize(res, personalSchema);
-        dispatch(merge(entities));
-        dispatch({
-          type: GET_SUCCESS,
-          personal
-        });
-      })
-      .catch(error => {
-        dispatch({type: GET_FAILURE, error});
+  return dispatch => getJSON('/api/personal')
+    .then((res) => {
+      const { result: personal, entities } = normalize(res, personalSchema);
+      dispatch(merge(entities));
+      dispatch({
+        type: GET_SUCCESS,
+        personal,
       });
-  };
+    })
+    .catch((error) => {
+      dispatch({ type: GET_FAILURE, error });
+    });
 }

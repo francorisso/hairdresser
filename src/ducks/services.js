@@ -1,4 +1,4 @@
-import Immutable from 'immutable'
+import Immutable from 'immutable';
 import { normalize, arrayOf } from 'normalizr';
 import { getJSON, postJSON } from '../lib/fetch';
 import { serviceSchema } from '../schemas';
@@ -17,7 +17,7 @@ const initState = Immutable.Map({
   adding: false,
   services: Immutable.List([]),
 });
-export default function reducer (state=initState, action) {
+export default function reducer(state = initState, action) {
   switch (action.type) {
     case ADD_SUCCESS: {
       return state.set(
@@ -36,20 +36,20 @@ export default function reducer (state=initState, action) {
   }
 }
 
-export function add ({name, time}) {
-  return dispatch => {
-    dispatch({type: ADD});
+export function add({ name, time }) {
+  return (dispatch) => {
+    dispatch({ type: ADD });
     return postJSON('/api/services', {
       name,
       time,
     })
-    .then(service => {
+    .then((service) => {
       dispatch({
         type: ADD_SUCCESS,
         service: normalize(service, serviceSchema),
       });
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch({
         type: ADD_FAILURE,
         error,
@@ -58,25 +58,25 @@ export function add ({name, time}) {
   };
 }
 
-export function get () {
-  return dispatch => {
-    dispatch({type: GET});
+export function get() {
+  return (dispatch) => {
+    dispatch({ type: GET });
     return getJSON('/api/services')
-      .then(res => {
-        const {result: services, entities} = normalize(res, arrayOf(serviceSchema));
+      .then((res) => {
+        const { result: services, entities } = normalize(res, arrayOf(serviceSchema));
         dispatch(merge(entities));
         dispatch({
           type: GET_SUCCESS,
           services,
         });
       })
-      .catch(error => {
-        dispatch({type: GET_FAILURE, error});
+      .catch((error) => {
+        dispatch({ type: GET_FAILURE, error });
       });
   };
 }
 
-export function toggleAddForm () {
+export function toggleAddForm() {
   return {
     type: TOGGLE_ADD_FORM,
   };

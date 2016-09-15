@@ -1,36 +1,36 @@
+/* global fetch */
 import 'whatwg-fetch';
 
-function checkStatus (response) {
+function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
-    return response
-  } else {
-    var error = new Error(response.statusText)
-    error.response = response
-    throw error
+    return response;
   }
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
 }
 
-function parseJSON (response) {
+function parseJSON(response) {
   return response.json();
 }
 
-function fetchJSON (endpoint, params) {
+function fetchJSON(endpoint, params) {
   return fetch(endpoint, params)
     .then(checkStatus)
     .then(parseJSON);
 }
 
-export function postJSON (endpoint, params) {
+export function postJSON(endpoint, params) {
   return fetchJSON(endpoint, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
   });
 }
 
-export function getJSON (endpoint) {
+export function getJSON(endpoint) {
   return fetchJSON(endpoint);
 }

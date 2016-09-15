@@ -1,6 +1,7 @@
+/* global document */
 import React from 'react';
 import { render } from 'react-dom';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import { syncHistoryWithStore } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { Router, Route, browserHistory } from 'react-router';
 
@@ -12,7 +13,7 @@ import Personal from './components/Personal';
 
 const history = syncHistoryWithStore(browserHistory, store);
 
-let reactElement = document.getElementById('app');
+const reactElement = document.getElementById('app');
 render(
   <Provider store={store}>
     <Router history={history}>
