@@ -8,6 +8,7 @@ module.exports = {
     'webpack/hot/only-dev-server',
     './src/index',
   ],
+  target: 'web',
   output: {
     path: Path.resolve(__dirname, 'build'),
     publicPath: '/build/',

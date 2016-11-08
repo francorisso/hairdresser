@@ -1,6 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+const links = [
+  {
+    link: '/',
+    name: 'Home',
+  },
+  {
+    link: '/services',
+    name: 'Services',
+  },
+  {
+    link: '/personal',
+    name: 'Personal',
+  },
+  {
+    link: '/settings',
+    name: 'Settings',
+  }];
+
 const App = props => (
   <div>
     <nav className="navbar navbar-default">
@@ -9,10 +27,9 @@ const App = props => (
           <Link to="/" className="navbar-brand">Peluqueria</Link>
         </div>
         <ul className="nav navbar-nav">
-          <li><Link to="/">Inicio</Link></li>
-          <li><Link to="/services">Servicios</Link></li>
-          <li><Link to="/personal">Personal</Link></li>
-          <li><Link to="/settings">Configuración</Link></li>
+          {links.map(item => <li>
+            <Link to={item.link} activeClassName="active">{item.name}</Link>
+          </li>)}
         </ul>
       </div>
     </nav>

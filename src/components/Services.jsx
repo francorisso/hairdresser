@@ -33,14 +33,13 @@ class Services extends PureComponent {
 
   render() {
     const { servicesIds, serviceEntities, adding } = this.props;
-    console.log(servicesIds, serviceEntities);
     const services = servicesIds.map(serviceId => (serviceEntities[serviceId]));
     return (<div>
-      <h1>Servicios</h1>
+      <h1>Services</h1>
       <ul>
-      { services.map((service, idx) => (
-        <li key={idx}>{service.name} - {service.time} minutos</li>
-      )) }
+        { services.map((service, idx) => (
+          <li key={idx}>{service.name} - {service.time} minutes</li>
+        )) }
       </ul>
       { !adding &&
         <div className="form-group">

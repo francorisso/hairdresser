@@ -29,12 +29,12 @@ class Personal extends PureComponent {
     return (<div>
       <h1 className={styles.title}>Personal</h1>
       <ul>
-      {personal.map((person, idx) => (
-        <li key={idx}>
-          {person.name}<br />
-          {person.services.join(',')}
-        </li>
-      ))}
+        {personal.map((person, idx) => (
+          <li key={idx}>
+            {person.name}<br />
+            {person.services.join(',')}
+          </li>
+        ))}
       </ul>
       { !adding &&
         <div className="form-group">
